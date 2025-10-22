@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Bot Showcase</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* --- Global Styles --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      color: #333;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* --- Header --- */
+    header {
+      background: #ff5722;
+      color: #fff;
+      padding: 2rem 1rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    /* Diwali Firework Animation */
+    .firework {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: yellow;
+      animation: explode 1.5s infinite ease-out;
+    }
+
+    @keyframes explode {
+      0% { transform: scale(0.5) translate(0,0); opacity: 1;}
+      50% { transform: scale(2) translate(-50px, -50px); opacity: 0.7;}
+      100% { transform: scale(0.5) translate(0,0); opacity: 0;}
+    }
+
+    /* --- Bot Container --- */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .offer {
+      background: #ffeb3b;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #b71c1c;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .bots {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .bot-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      position: relative;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .bot-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .bot-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .bot-card p {
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    /* --- Premium Lock --- */
+    .premium {
+      position: relative;
+    }
+
+    .premium::before {
+      content: "\f023";
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5rem;
+      color: #ff5722;
+      animation: lockPulse 1.5s infinite;
+    }
+
+    @keyframes lockPulse {
+      0%, 100% { transform: scale(1);}
+      50% { transform: scale(1.2);}
+    }
+
+    /* WhatsApp Popup */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff3e0;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      text-align: center;
+      z-index: 1000;
+    }
+
+    .popup button {
+      background: #25d366;
+      color: #fff;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* Overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>AI Bot Showcase</h1>
+    <p>Interact with legendary minds from history and science</p>
+    <div class="firework"></div>
+  </header>
+
+  <div class="container">
+    <div class="offer">🎉 Diwali Special Offer: Unlock all Premium Bots for <del>1999</del> ₹ 999 only! 50% OFF 🎉</div>
+
+    <div class="bots">
+      <a href="#" class="bot-card premium" data-name="Mahatma Gandhi">
+        <h3>01. Mahatma Gandhi</h3>
+        <p>Ahimsa aur Satyagraha ke liye</p>
+      </a>
+      <a href="#" class="bot-card premium" data-name="Jawaharlal Nehru">
+        <h3>02. Jawaharlal Nehru</h3>
+        <p>Bharat ke pehle Pradhan Mantri</p>
+      </a>
+      <a href="#" class="bot-card premium" data-name="B. R. Ambedkar">
+        <h3>03. B. R. Ambedkar</h3>
+        <p>Samvidhan ke janak</p>
+      </a>
+      <a href="Rabindranath Tagore bot.html" class="bot-card" data-name="Rabindranath Tagore">
+        <h3>04. Rabindranath Tagore</h3>
+        <p>Sahitya aur kala ke liye</p>
+      </a>
+      <a href="Subhas Chandra Bose bot.html" class="bot-card" data-name="Subhas Chandra Bose">
+        <h3>05. Subhas Chandra Bose</h3>
+        <p>Azadi ke liye sena aur rashtravaad</p>
+      </a>
+      <a href="#" class="bot-card premium" data-name="Dr. A.P.J. Abdul Kalam">
+        <h3>06. Dr. A.P.J. Abdul Kalam</h3>
+        <p>Vigyan aur Rashtriya seva</p>
+      </a>
+      <a href="Bhagat Singh bot.html" class="bot-card" data-name="Bhagat Singh">
+        <h3>07. Bhagat Singh</h3>
+        <p>Swatantrata Sangram ke shahid</p>
+      </a>
+      <a href="#" class="bot-card premium" data-name="Albert Einstein">
+        <h3>08. Albert Einstein</h3>
+        <p>Vigyan aur Relativity ke liye (Germany/USA)</p>
+      </a>
+      <a href="Isaac Newton bot.html" class="bot-card" data-name="Isaac Newton">
+        <h3>09. Isaac Newton</h3>
+        <p>Physics aur Ganit ke liye (England)</p>
+      </a>
+      <a href="Leonardo da Vinci bot.html" class="bot-card" data-name="Leonardo da Vinci">
+        <h3>10. Leonardo da Vinci</h3>
+        <p>Kala aur Vigyan ke liye (Italy)</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- WhatsApp Popup -->
+  <div class="overlay"></div>
+  <div class="popup" id="popup">
+    <h2>Unlock Premium Bots</h2>
+    <p>For unlocking Premium versions, please message us on WhatsApp. We will send you a QR for payment within 24 hours. <br>Under ₹999, unlock all Premium Bots.</p>
+    <button onclick="window.open('https://wa.me/+91 8999625371','_blank')">Message on WhatsApp</button>
+  </div>
+
+  <script>
+    // Premium Bot Click
+    const premiumBots = document.querySelectorAll('.premium');
+    const popup = document.getElementById('popup');
+    const overlay = document.querySelector('.overlay');
+
+    premiumBots.forEach(bot => {
+      bot.addEventListener('click', (e) => {
+        e.preventDefault();
+        popup.style.display = 'block';
+        overlay.style.display = 'block';
+      });
+    });
+
+    // Close popup on overlay click
+    overlay.addEventListener('click', () => {
+      popup.style.display = 'none';
+      overlay.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

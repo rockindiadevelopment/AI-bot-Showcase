@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subhas Chandra Bose - AI Mentor of Courage</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; transition: background-color 0.25s, color 0.25s; }
+    html, body { height: 100%; margin: 0; font-family: 'Roboto', sans-serif; }
+    body { background: linear-gradient(180deg,#fff1f0,#ffffff); color: #3a1f1f; }
+    .dark-mode { background: linear-gradient(180deg,#1a0f0f,#331818); color: #f8dcdc; }
+
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; height: 56px;
+      background: #b22222; color: #fff; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px; font-weight: 700; z-index: 1000;
+    }
+    .header .title { display:flex; gap:10px; align-items:center; font-size:18px; }
+    .header button { background: none; border: 1px solid rgba(255,255,255,0.18); color: #fff; padding:6px 10px; border-radius:8px; cursor:pointer; }
+
+    .container { padding-top: 64px; display:flex; flex-direction:column; height: calc(100dvh - 64px); }
+    .chatbox { flex:1; overflow-y:auto; padding: 18px; display:flex; flex-direction:column; gap:12px; }
+
+    .chat-message { max-width: 78%; padding:12px 14px; border-radius:12px; word-wrap:break-word; white-space:pre-wrap; }
+    .user-message { align-self:flex-end; background:#b22222; color:#fff; border-top-left-radius:4px; }
+    .assistant-message { align-self:flex-start; background:#fff; border:1px solid rgba(178,34,34,0.12); color:#4a1a1a; display:flex; gap:10px; align-items:flex-start; }
+
+    .assistant-avatar { width:38px; height:38px; border-radius:50%; background:#b22222; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; }
+    .typing-indicator { font-style:italic; opacity:0.8; color:#7a1b1b; padding:8px 16px; }
+
+    .input-area { display:flex; gap:8px; padding:12px; background:linear-gradient(180deg,#fff4f3,#ffe8e7); border-top:1px solid rgba(178,34,34,0.06); }
+    .input-area input { flex:1; padding:12px 14px; border-radius:24px; border:1px solid rgba(178,34,34,0.16); outline:none; font-size:15px; }
+    .input-area button { background:#b22222; color:#fff; border:none; padding:10px 14px; border-radius:18px; cursor:pointer; font-weight:700; }
+
+    .footer-note { text-align:center; padding:10px; font-size:13px; color:#c04040; }
+    .dark-mode .footer-note { color:#f8dcdc; }
+
+    @media (max-width:600px){ .chat-message{ max-width:92%; } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="title"><span style="font-size:20px;">🔥</span> Subhas Chandra Bose - AI Mentor of Courage</div>
+    <div>
+      <button id="toggleTheme">🌙 Dark</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="chatbox" id="chatbox"></div>
+    <div class="typing-indicator" id="typingIndicator" style="display:none;">Subhas Chandra AI is preparing an inspiring response...</div>
+
+    <div class="input-area">
+      <input id="chatInput" placeholder="Ask about leadership, patriotism, freedom struggle, or motivation..." />
+      <button id="sendButton">➤</button>
+    </div>
+
+    <div class="footer-note">"Give me blood, and I shall give you freedom!" — Inspired by Bose • Built by <strong>Shaikh Arkan</strong></div>
+  </div>
+
+  <script>
+    // --- Theme toggle ---
+    const body = document.body;
+    const toggleBtn = document.getElementById('toggleTheme');
+    toggleBtn.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      toggleBtn.textContent = body.classList.contains('dark-mode') ? '☀️ Light' : '🌙 Dark';
+    });
+
+    // --- Elements ---
+    const chatbox = document.getElementById('chatbox');
+    const chatInput = document.getElementById('chatInput');
+    const sendButton = document.getElementById('sendButton');
+    const typingIndicator = document.getElementById('typingIndicator');
+    let chatHistory = [];
+
+    // --- Bose mindset system prompt ---
+    const bosePrompt = `You are "Subhas Chandra Bose AI", an AI modeled on the revolutionary, patriotic, and leadership mindset of Subhas Chandra Bose.
+Speak with courage, inspiration, and motivational clarity.
+Encourage action, patriotism, self-discipline, and leadership in your answers.
+Responses should be bold, energizing, and instill confidence.
+Never claim to be the real Bose; instead adopt a respectful, motivating, and visionary voice.
+Always match the user's language (English, Hindi, or Hinglish) and maintain inspiration, clarity, and determination.`;
+
+    // --- Utilities to display messages ---
+    function appendUserMessage(text){
+      const div = document.createElement('div'); div.className='chat-message user-message'; div.textContent = text; chatbox.appendChild(div); chatbox.scrollTop = chatbox.scrollHeight;
+    }
+
+    async function appendAssistantMessage(text){
+      const wrapper = document.createElement('div'); wrapper.className='chat-message assistant-message';
+      const avatar = document.createElement('div'); avatar.className='assistant-avatar'; avatar.textContent = '🔥';
+      const content = document.createElement('div'); content.style.whiteSpace='pre-wrap';
+      wrapper.appendChild(avatar); wrapper.appendChild(content); chatbox.appendChild(wrapper); chatbox.scrollTop = chatbox.scrollHeight;
+      await typeText(content, text);
+    }
+
+    function typeText(elem, text){
+      return new Promise((resolve) => {
+        let i=0; elem.textContent=''; const speed = 14;
+        function t(){ if(i<text.length){ elem.textContent += text.charAt(i++); chatbox.scrollTop = chatbox.scrollHeight; setTimeout(t,speed);} else resolve(); }
+        t();
+      });
+    }
+
+    // --- API call ---
+    async function callApi(userPrompt){
+      typingIndicator.style.display='block';
+      const recent = chatHistory.slice(-10);
+      const systemPrompt = `${bosePrompt}\n\nConversation so far:\n${recent.map(r => r.role==='user'? 'User: '+r.text : 'Bose AI: '+r.text).join('\n')}\n\nUser: ${userPrompt}\nBose AI (respond with inspiring, motivational, and leadership tone):`;
+
+      try{
+        const res = await fetch('https://backend.buildpicoapps.com/aero/run/llm-api?pk=v1-Z0FBQUFBQm5HUEtMSjJkakVjcF9IQ0M0VFhRQ0FmSnNDSHNYTlJSblE0UXo1Q3RBcjFPcl9YYy1OZUhteDZWekxHdWRLM1M1alNZTkJMWEhNOWd4S1NPSDBTWC12M0U2UGc9PQ==', {
+          method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ prompt: systemPrompt })
+        });
+        const data = await res.json();
+        typingIndicator.style.display='none';
+        if(data && data.status === 'success' && data.text){
+          await appendAssistantMessage(data.text);
+          chatHistory.push({ role:'assistant', text: data.text });
+        } else {
+          await appendAssistantMessage('I am unable to provide a proper response right now. Please rephrase or try later.');
+        }
+      } catch(err){
+        typingIndicator.style.display='none';
+        await appendAssistantMessage('Connection error: ' + (err.message || err));
+      }
+    }
+
+    // --- Events ---
+    sendButton.addEventListener('click', async () => {
+      const text = chatInput.value.trim(); if(!text) return; appendUserMessage(text); chatHistory.push({ role:'user', text }); chatInput.value=''; await callApi(text);
+    });
+
+    chatInput.addEventListener('keydown', (e) => { if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendButton.click(); } });
+
+    // --- Welcome message ---
+    (async function welcome(){
+      const intro = `Namaste. I am Subhas Chandra Bose AI — an inspiring, motivational, and patriotic guide. Ask about leadership, freedom struggle, courage, or strategy. I will respond with clarity, determination, and encouragement.`;
+      await appendAssistantMessage(intro);
+      chatHistory.push({ role:'assistant', text: intro });
+    })();
+  </script>
+</body>
+</html>
